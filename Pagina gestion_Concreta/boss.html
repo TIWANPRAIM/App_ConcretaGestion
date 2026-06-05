@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Concreta — Panel de Control (Jefe)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<!-- Sidebar overlay for mobile/tablet -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<div class="app-layout">
+
+  <!-- ====== SIDEBAR ====== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon" style="background:#fff;padding:2px;overflow:hidden;">
+        <img src="img/concreta-icon.png" alt="Concreta" style="width:34px;height:34px;object-fit:cover;border-radius:6px;display:block;">
+      </div>
+      <div>
+        <div class="logo-text">Concreta</div>
+        <div class="logo-sub">Panel Director</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Reportes</div>
+
+      <button class="nav-item active" onclick="showSection('dashboard')" id="nav-dashboard">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="12" width="4" height="9" rx="1"/><rect x="10" y="7" width="4" height="14" rx="1"/><rect x="17" y="2" width="4" height="19" rx="1"/></svg>
+        </span>
+        Resumen General
+      </button>
+
+      <button class="nav-item" onclick="showSection('vendedores')" id="nav-vendedores">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 3-1.34 3-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+        </span>
+        Vendedores
+      </button>
+
+      <button class="nav-item" onclick="showSection('ventas')" id="nav-ventas">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M6 2a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6H6zm7 1.5L18.5 8H13V3.5zM6 4h5v5h5v11H6V4zm2 8v2h8v-2H8zm0 4v2h5v-2H8z"/></svg>
+        </span>
+        Registro de Ventas
+      </button>
+
+      <div class="nav-section-label">Configuración</div>
+
+      <button class="nav-item" onclick="showSection('fraccionamientos')" id="nav-fracc">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17 2H7a2 2 0 00-2 2v17h4v-5h6v5h4V4a2 2 0 00-2-2zM8 14H6v-2h2v2zm0-4H6V8h2v2zm4 4h-2v-2h2v2zm0-4h-2V8h2v2zm4 4h-2v-2h2v2zm0-4h-2V8h2v2z"/></svg>
+        </span>
+        Desarrollos Lotes
+      </button>
+
+      <button class="nav-item" onclick="showSection('nuevo-fracc')" id="nav-nuevo-fracc">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2zm-2 9h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
+        </span>
+        Nuevo Desarrollo
+      </button>
+
+      <button class="nav-item" onclick="showSection('gestion-vendedores')" id="nav-gestion">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+        </span>
+        Gestión Vendedores
+      </button>
+
+      <div class="nav-section-label">Herramientas</div>
+
+      <button class="nav-item" onclick="showSection('prospectos')" id="nav-prospectos">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg>
+        </span>
+        Prospectos CRM
+      </button>
+
+      <button class="nav-item" onclick="showSection('comisiones')" id="nav-comisiones">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1H5.6c.12 2.19 1.76 3.42 3.7 3.82V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.2-4.4z"/></svg>
+        </span>
+        Comisiones
+      </button>
+
+      <button class="nav-item" onclick="showSection('configuracion')" id="nav-config">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+        </span>
+        Configuración
+      </button>
+    </nav>
+
+    <div class="sidebar-user" id="sidebarUser">
+      <div class="user-avatar" id="avatarEl">J</div>
+      <div>
+        <div class="user-name" id="userNameEl">Marco González</div>
+        <div class="user-role">Director General</div>
+      </div>
+      <button class="btn-logout" onclick="logout()" title="Cerrar sesión">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M13 3h-2v10h2V3zm4.83 2.17l-1.42 1.42C17.99 7.86 19 9.81 19 12c0 3.87-3.13 7-7 7s-7-3.13-7-7c0-2.19 1.01-4.14 2.58-5.42L6.17 5.17C4.23 6.82 3 9.26 3 12c0 4.97 4.03 9 9 9s9-4.03 9-9c0-2.74-1.23-5.18-3.17-6.83z"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ====== MAIN ====== -->
+  <div class="main-content">
+    <header class="top-bar">
+      <div style="display:flex;align-items:center;gap:1rem;">
+        <button class="hamburger" id="hamburger" onclick="toggleSidebar()">
+          <span></span><span></span><span></span>
+        </button>
+        <div class="top-bar-title">
+          <h2 id="pageTitle">Resumen General</h2>
+          <p id="pageSubtitle">Métricas globales y estadísticas de rendimiento</p>
+        </div>
+      </div>
+      <div class="top-bar-actions">
+        <span id="topDate" style="font-size:0.78rem;color:var(--text-muted);"></span>
+      </div>
+    </header>
+
+    <main class="page-content">
+
+      <!-- ========================
+           SECTION: DASHBOARD
+           ======================== -->
+      <section id="sec-dashboard">
+
+        <!-- KPI Metrics Grid -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon" style="background:#DCFCE7;color:#16A34A;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1H5.6c.12 2.19 1.76 3.42 3.7 3.82V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.2-4.4z"/></svg>
+            </div>
+            <div class="stat-value" id="statVentasGlobales">$0</div>
+            <div class="stat-label">Ingresos estimados</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background:#EBF4FF;color:#2B6CB8;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            </div>
+            <div class="stat-value" id="statVendidosGlobal">0</div>
+            <div class="stat-label">Lotes vendidos</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background:#FEF3C7;color:#D97706;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
+            </div>
+            <div class="stat-value" id="statSeparadosGlobal">0</div>
+            <div class="stat-label">Lotes separados</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background:#F3E8FF;color:#7C3AED;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M3 3h8v8H3V3zm10 0h8v8h-8V3zM3 13h8v8H3v-8zm10 0h8v8h-8v-8z"/></svg>
+            </div>
+            <div class="stat-value" id="statFraccsGlobal">0</div>
+            <div class="stat-label">Desarrollos activos</div>
+          </div>
+        </div>
+
+        <!-- Period toggle for performance charts -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:0.75rem;">
+          <p style="font-size:0.82rem;color:var(--text-muted);margin:0;">Período de análisis para las gráficas de rendimiento:</p>
+          <div class="period-toggle">
+            <button id="period-semana" onclick="setChartPeriod('semana')">Semana</button>
+            <button id="period-mes" class="active" onclick="setChartPeriod('mes')">Meses</button>
+            <button id="period-año" onclick="setChartPeriod('año')">Año</button>
+          </div>
+        </div>
+
+        <!-- Charts Row 1: Employee Performance + Trend -->
+        <div class="grid-2 mb-3">
+          <div class="chart-card">
+            <h3 id="empChartTitle">Rendimiento de Asesores · Últimos 6 meses</h3>
+            <div class="chart-wrap" style="height:240px;">
+              <canvas id="employeesChart"></canvas>
+            </div>
+          </div>
+          <div class="chart-card">
+            <h3 id="trendChartTitle">Tendencia de Conversión · Últimos 6 meses</h3>
+            <div class="chart-wrap" style="height:240px;">
+              <canvas id="monthlyChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts Row 2: Lot Status + Financial Recovery -->
+        <div class="grid-2 mb-3">
+          <div class="chart-card">
+            <h3>Distribución de Lotes por Estado</h3>
+            <div class="chart-wrap" style="height:240px;position:relative;">
+              <canvas id="lotStatusChart"></canvas>
+              <div id="lotStatusCenter" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-65%);text-align:center;pointer-events:none;line-height:1;">
+                <div id="lotTotalNum" style="font-size:1.75rem;font-weight:900;color:var(--text);">—</div>
+                <div style="font-size:0.65rem;color:var(--text-muted);margin-top:0.15rem;font-weight:500;text-transform:uppercase;letter-spacing:0.06em;">lotes totales</div>
+              </div>
+            </div>
+          </div>
+          <div class="chart-card">
+            <h3>Inversión vs Recuperación por Desarrollo</h3>
+            <p style="font-size:0.72rem;color:var(--text-muted);margin:-0.5rem 0 0.85rem;">Inversión estimada al 62% del valor total de venta del inventario</p>
+            <div id="financialSummary" class="fin-summary"></div>
+            <div class="chart-wrap" style="height:190px;">
+              <canvas id="financialChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 3: Leaderboard + Recent Transactions -->
+        <div class="grid-3">
+          <div class="card">
+            <h3 class="card-title">Top Vendedores · Últimos 7 días</h3>
+            <p class="card-subtitle mb-2">Desempeño semanal del equipo</p>
+            <div id="weeklyLeaderboard"></div>
+          </div>
+          <div class="card col-span-2">
+            <h3 class="card-title">Últimas Transacciones Registradas</h3>
+            <p class="card-subtitle mb-2">Historial en tiempo real de operaciones</p>
+            <div id="recentTransactionsList"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================
+           SECTION: VENDEDORES
+           ======================== -->
+      <section id="sec-vendedores" class="hidden">
+        <div class="employees-grid" id="employeesCardGrid"></div>
+      </section>
+
+      <!-- ========================
+           SECTION: REGISTRO DE VENTAS
+           ======================== -->
+      <section id="sec-ventas" class="hidden">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Historial Completo de Operaciones</div>
+              <div class="card-subtitle">Todas las ventas y separaciones de la plataforma</div>
+            </div>
+          </div>
+          <div id="globalSalesList"></div>
+        </div>
+      </section>
+
+      <!-- ========================
+           SECTION: FRACCIONAMIENTOS
+           ======================== -->
+      <section id="sec-fraccionamientos" class="hidden">
+        <div id="bossFraccList"></div>
+      </section>
+
+      <!-- ========================
+           SECTION: GESTIÓN VENDEDORES
+           ======================== -->
+      <section id="sec-gestion-vendedores" class="hidden">
+
+        <div class="card mb-3" style="max-width:620px;">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Agregar Nuevo Vendedor</div>
+              <div class="card-subtitle">Crea credenciales de acceso para un nuevo asesor de ventas</div>
+            </div>
+          </div>
+          <div id="addEmpAlert" class="hidden"></div>
+          <form id="addEmpForm" novalidate>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="empFullName">Nombre Completo <span style="color:var(--rose)">*</span></label>
+                <input type="text" id="empFullName" placeholder="Ana García López" required>
+              </div>
+              <div class="form-group">
+                <label for="empUserId">Usuario (ID) <span style="color:var(--rose)">*</span></label>
+                <input type="text" id="empUserId" placeholder="ana_garcia" required autocapitalize="none" autocorrect="off">
+                <span class="input-hint">Solo letras minúsculas, números y guiones bajos</span>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="empPassword">Contraseña inicial <span style="color:var(--rose)">*</span></label>
+                <input type="text" id="empPassword" placeholder="ej. vendedor2024" required>
+              </div>
+              <div class="form-group">
+                <label for="empPhone">Teléfono</label>
+                <input type="tel" id="empPhone" placeholder="81 1234 5678">
+              </div>
+            </div>
+            <div style="display:flex;justify-content:flex-end;padding-top:1rem;border-top:1px solid var(--border);margin-top:0.5rem;">
+              <button type="submit" class="btn btn-primary">Crear Vendedor</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Vendedores Registrados</div>
+              <div class="card-subtitle">Gestiona credenciales y acceso del equipo de asesores</div>
+            </div>
+          </div>
+          <div id="gestionEmpList"></div>
+        </div>
+
+      </section>
+
+      <!-- ========================
+           SECTION: NUEVO FRACCIONAMIENTO
+           ======================== -->
+      <section id="sec-nuevo-fracc" class="hidden">
+        <div class="card" style="max-width:780px;margin:0 auto;">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Registrar Nuevo Desarrollo Habitacional</div>
+              <div class="card-subtitle">Crea un fraccionamiento con manzanas y lotes programados automáticamente.</div>
+            </div>
+          </div>
+
+          <div id="formAlert" class="alert alert-error hidden"></div>
+
+          <form id="newFraccForm" novalidate>
+            <div class="fracc-setup-grid">
+              <div class="form-group">
+                <label for="fraccNombre">Nombre del Desarrollo <span style="color:var(--rose)">*</span></label>
+                <input type="text" id="fraccNombre" placeholder="Ej. Lomas de Monterrey" required>
+              </div>
+              <div class="form-group">
+                <label for="fraccLocation">Ubicación (Estado/Municipio) <span style="color:var(--rose)">*</span></label>
+                <input type="text" id="fraccLocation" placeholder="Ej. Escobedo, Nuevo León" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="fraccSector">Sector / Etapa <span style="color:var(--rose)">*</span></label>
+              <input type="text" id="fraccSector" placeholder="Ej. 1er. Sector — Etapa A" required>
+            </div>
+
+            <div class="form-group">
+              <label for="fraccDesc">Descripción Comercial <span style="color:var(--rose)">*</span></label>
+              <textarea id="fraccDesc" placeholder="Detalles de amenidades, accesos controlados y características generales..." required></textarea>
+            </div>
+
+            <div class="separator"></div>
+
+            <h3 style="margin-bottom:1rem;font-size:1.05rem;">Configuración de Manzanas</h3>
+            <div class="form-group" style="max-width:250px;">
+              <label for="numManzanas">Cantidad de Manzanas <span style="color:var(--rose)">*</span></label>
+              <select id="numManzanas" onchange="generateManzanaInputs()">
+                <option value="">Seleccionar...</option>
+                <option value="1">1 Manzana</option>
+                <option value="2">2 Manzanas</option>
+                <option value="3">3 Manzanas</option>
+                <option value="4">4 Manzanas</option>
+                <option value="5">5 Manzanas</option>
+              </select>
+            </div>
+
+            <div id="manzanasSetupContainer" style="margin-top:1.25rem;"></div>
+
+            <div class="modal-footer" style="border-top:1px solid var(--border);padding-top:1.5rem;margin-top:2rem;">
+              <button type="button" class="btn btn-ghost" onclick="showSection('dashboard')">Cancelar</button>
+              <button type="submit" class="btn btn-primary" id="saveFraccBtn">Crear Fraccionamiento</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- ========================
+           SECTION: PROSPECTOS CRM
+           ======================== -->
+      <section id="sec-prospectos" class="hidden">
+        <div class="card">
+          <div class="card-header" style="flex-wrap:wrap;gap:0.75rem;">
+            <div>
+              <div class="card-title">Prospectos del Equipo</div>
+              <div class="card-subtitle">Pipeline CRM · visibilidad global de todos los asesores</div>
+            </div>
+            <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;">
+              <select id="prospFilterEmp" onchange="loadProspectosGlobal()" class="filter-select">
+                <option value="">Todos los asesores</option>
+              </select>
+              <select id="prospFilterStage" onchange="loadProspectosGlobal()" class="filter-select">
+                <option value="">Todas las etapas</option>
+                <option value="Nuevo contacto">Nuevo contacto</option>
+                <option value="Visita agendada">Visita agendada</option>
+                <option value="Lote mostrado">Lote mostrado</option>
+                <option value="En proceso">En proceso</option>
+                <option value="Cerrado">Cerrado</option>
+                <option value="Descartado">Descartado</option>
+              </select>
+            </div>
+          </div>
+          <div id="prospGlobalList"></div>
+        </div>
+      </section>
+
+      <!-- ========================
+           SECTION: COMISIONES
+           ======================== -->
+      <section id="sec-comisiones" class="hidden">
+        <div class="grid-2 mb-3">
+          <div class="card">
+            <div class="card-title mb-1">Configurar Comisiones</div>
+            <div class="card-subtitle mb-3">Porcentaje sobre el precio del lote</div>
+            <form id="commConfigForm">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Comisión por Venta (%)</label>
+                  <input type="number" id="commPctVenta" min="0" max="20" step="0.1" placeholder="2.0">
+                  <span class="input-hint">Sobre el precio total del lote</span>
+                </div>
+                <div class="form-group">
+                  <label>Comisión por Separación (%)</label>
+                  <input type="number" id="commPctSep" min="0" max="20" step="0.1" placeholder="0.5">
+                  <span class="input-hint">Al registrar la separación</span>
+                </div>
+              </div>
+              <div style="display:flex;justify-content:flex-end;">
+                <button type="submit" class="btn btn-primary">Guardar tasas</button>
+              </div>
+            </form>
+          </div>
+          <div class="card">
+            <div class="card-title mb-2">Resumen del Equipo</div>
+            <div id="commTeamSummary"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title mb-2">Comisiones por Vendedor</div>
+          <div id="commTableEl"></div>
+        </div>
+      </section>
+
+      <!-- ========================
+           SECTION: CONFIGURACIÓN
+           ======================== -->
+      <section id="sec-configuracion" class="hidden">
+        <div class="card mb-3" style="max-width:700px;">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Notificaciones por Correo</div>
+              <div class="card-subtitle">Alerta al director en cada venta. Gratis vía EmailJS.</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="emailEnabled" onchange="toggleEmailFields()">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div id="emailConfigFields" class="hidden">
+            <div class="alert alert-info" style="font-size:0.8rem;margin-bottom:1rem;">
+              Pasos: 1) Cuenta gratuita en <strong>emailjs.com</strong> · 2) Add Email Service → conecta Gmail/Outlook · 3) Email Templates → nueva plantilla (pega el HTML de <code>js/notifications.js</code>) · 4) Copia tus IDs aquí.
+            </div>
+            <form id="emailConfigForm">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Service ID <span style="color:var(--rose)">*</span></label>
+                  <input type="text" id="cfgServiceId" placeholder="service_xxxxxxx" autocomplete="off">
+                </div>
+                <div class="form-group">
+                  <label>Template ID <span style="color:var(--rose)">*</span></label>
+                  <input type="text" id="cfgTemplateId" placeholder="template_xxxxxxx" autocomplete="off">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Public Key <span style="color:var(--rose)">*</span></label>
+                  <input type="text" id="cfgPublicKey" placeholder="xxxxxxxxxxxxxxxxxxxx" autocomplete="off">
+                </div>
+                <div class="form-group">
+                  <label>Correo del Director <span style="color:var(--rose)">*</span></label>
+                  <input type="email" id="cfgBossEmail" placeholder="director@empresa.com">
+                </div>
+              </div>
+              <div id="emailCfgAlert" class="hidden" style="margin-bottom:1rem;"></div>
+              <div style="display:flex;justify-content:flex-end;">
+                <button type="submit" class="btn btn-primary">Guardar configuración</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="card" style="max-width:700px;">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Alertas de Separaciones</div>
+              <div class="card-subtitle">El sistema resalta en el dashboard las separaciones próximas a vencer</div>
+            </div>
+          </div>
+          <form id="sepTimerForm">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Aviso a los N días</label>
+                <input type="number" id="cfgWarnDays" min="1" max="60" placeholder="20">
+                <span class="input-hint">Aparece alerta amarilla en el dashboard</span>
+              </div>
+              <div class="form-group">
+                <label>Vencimiento a los N días</label>
+                <input type="number" id="cfgExpireDays" min="1" max="120" placeholder="30">
+                <span class="input-hint">Se marca como vencida (rojo) en el dashboard</span>
+              </div>
+            </div>
+            <div style="display:flex;justify-content:flex-end;">
+              <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/boss.js"></script>
+</body>
+</html>

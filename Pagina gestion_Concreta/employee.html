@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Concreta — Panel Vendedor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<!-- Sidebar overlay for mobile/tablet -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<div class="app-layout">
+
+  <!-- ====== SIDEBAR ====== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon" style="background:#fff;padding:2px;overflow:hidden;">
+        <img src="img/concreta-icon.png" alt="Concreta" style="width:34px;height:34px;object-fit:cover;border-radius:6px;display:block;">
+      </div>
+      <div>
+        <div class="logo-text">Concreta</div>
+        <div class="logo-sub">Panel Vendedor</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Inicio</div>
+      <button class="nav-item active" onclick="showSection('dashboard')" id="nav-dashboard">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        </span>
+        Mi Dashboard
+      </button>
+
+      <div class="nav-section-label">Ventas</div>
+      <button class="nav-item" onclick="showSection('fraccionamientos')" id="nav-fracc">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17 2H7a2 2 0 00-2 2v17h4v-5h6v5h4V4a2 2 0 00-2-2zM8 14H6v-2h2v2zm0-4H6V8h2v2zm4 4h-2v-2h2v2zm0-4h-2V8h2v2zm4 4h-2v-2h2v2zm0-4h-2V8h2v2z"/></svg>
+        </span>
+        Fraccionamientos
+      </button>
+      <button class="nav-item" onclick="showSection('mis-ventas')" id="nav-ventas">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M6 2a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6H6zm7 1.5L18.5 8H13V3.5zM6 4h5v5h5v11H6V4zm2 8v2h8v-2H8zm0 4v2h5v-2H8z"/></svg>
+        </span>
+        Mis Ventas
+      </button>
+
+      <div class="nav-section-label">Perfil</div>
+      <button class="nav-item" onclick="showSection('mi-perfil')" id="nav-perfil">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+        </span>
+        Mi Perfil
+      </button>
+
+      <div class="nav-section-label">Herramientas</div>
+      <button class="nav-item" onclick="showSection('prospectos')" id="nav-prospectos">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg>
+        </span>
+        Mis Prospectos
+      </button>
+      <button class="nav-item" onclick="showSection('calculadora')" id="nav-calc">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5c0-1.1-.9-2-2-2zM9 17H7v-2h2v2zm0-4H7v-2h2v2zm0-4H7V7h2v2zm4 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2zm4 8h-2v-7h2v7z"/></svg>
+        </span>
+        Calculadora Crédito
+      </button>
+    </nav>
+
+    <div class="sidebar-user" id="sidebarUser">
+      <div class="user-avatar" id="avatarEl"></div>
+      <div>
+        <div class="user-name" id="userNameEl">—</div>
+        <div class="user-role">Vendedor</div>
+      </div>
+      <button class="btn-logout" onclick="logout()" title="Cerrar sesión">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M13 3h-2v10h2V3zm4.83 2.17l-1.42 1.42C17.99 7.86 19 9.81 19 12c0 3.87-3.13 7-7 7s-7-3.13-7-7c0-2.19 1.01-4.14 2.58-5.42L6.17 5.17C4.23 6.82 3 9.26 3 12c0 4.97 4.03 9 9 9s9-4.03 9-9c0-2.74-1.23-5.18-3.17-6.83z"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ====== MAIN ====== -->
+  <div class="main-content">
+    <header class="top-bar">
+      <div style="display:flex;align-items:center;gap:1rem;">
+        <button class="hamburger" id="hamburger" onclick="toggleSidebar()">
+          <span></span><span></span><span></span>
+        </button>
+        <div class="top-bar-title">
+          <h2 id="pageTitle">Mi Dashboard</h2>
+          <p id="pageSubtitle">Resumen de tu actividad</p>
+        </div>
+      </div>
+      <div class="top-bar-actions">
+        <span id="topDate" style="font-size:0.78rem;color:var(--text-muted);"></span>
+      </div>
+    </header>
+
+    <main class="page-content">
+
+      <!-- ========================
+           SECTION: DASHBOARD
+           ======================== -->
+      <section id="sec-dashboard">
+
+        <!-- Goal Banner -->
+        <div class="goal-banner" id="goalBanner">
+          <div class="goal-text">
+            <h3>🎯 Meta del Mes</h3>
+            <p>Sigue así, cada venta acerca a tu objetivo</p>
+          </div>
+          <div class="goal-visual">
+            <div class="goal-count">
+              <div class="gc-num" id="goalSold">0</div>
+              <div class="gc-lbl">Vendidos</div>
+            </div>
+            <div class="goal-divider"></div>
+            <div class="goal-count">
+              <div class="gc-num" id="goalReserved">0</div>
+              <div class="gc-lbl">Separados</div>
+            </div>
+            <div class="goal-divider"></div>
+            <div class="goal-bar-wrap">
+              <div class="goal-pct">
+                <span>Progreso</span>
+                <span id="goalPct">0%</span>
+              </div>
+              <div class="goal-progress">
+                <div class="goal-progress-fill" id="goalFill" style="width:0%"></div>
+              </div>
+              <div style="font-size:0.68rem;color:rgba(255,255,255,0.4);margin-top:0.35rem;">Meta: 3 ventas/mes</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stat Cards -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon" style="background:#DCFCE7;">🏠</div>
+            <div class="stat-value" id="statVentas">0</div>
+            <div class="stat-label">Ventas totales</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background:#FEF3C7;">📌</div>
+            <div class="stat-value" id="statSep">0</div>
+            <div class="stat-label">Separaciones</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background:#EBF4FF;">📅</div>
+            <div class="stat-value" id="statSemana">0</div>
+            <div class="stat-label">Esta semana</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background:#FEE2E2;">📆</div>
+            <div class="stat-value" id="statMes">0</div>
+            <div class="stat-label">Este mes</div>
+          </div>
+        </div>
+
+        <!-- Quick action -->
+        <div class="card mb-3" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+          <div>
+            <h3 style="font-size:1rem;font-weight:700;">Ver disponibilidad de lotes</h3>
+            <p class="text-muted mt-1" style="font-size:0.82rem;">Navega los fraccionamientos y registra una venta o separación.</p>
+          </div>
+          <button class="btn btn-primary" onclick="showSection('fraccionamientos')">Ver Fraccionamientos →</button>
+        </div>
+
+        <!-- Recent Sales -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Mis ventas recientes</div>
+              <div class="card-subtitle">Últimas transacciones registradas</div>
+            </div>
+          </div>
+          <div id="recentSalesList"></div>
+        </div>
+      </section>
+
+      <!-- ========================
+           SECTION: FRACCIONAMIENTOS
+           ======================== -->
+      <section id="sec-fraccionamientos" class="hidden">
+        <div id="fraccList"></div>
+      </section>
+
+      <!-- ========================
+           SECTION: MIS VENTAS
+           ======================== -->
+      <section id="sec-mis-ventas" class="hidden">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">📋 Historial de Ventas</div>
+              <div class="card-subtitle">Todas las ventas y separaciones que has registrado</div>
+            </div>
+          </div>
+          <div id="fullSalesList"></div>
+        </div>
+      </section>
+
+      <!-- ========================
+           SECTION: MI PERFIL
+           ======================== -->
+      <section id="sec-mi-perfil" class="hidden">
+        <div class="card" style="max-width:560px;">
+          <div class="card-header">
+            <div class="card-title">Mi Perfil</div>
+          </div>
+          <div style="text-align:center;margin-bottom:2rem;">
+            <div class="employee-avatar" id="profileAvatar" style="width:90px;height:90px;font-size:2rem;margin:0 auto 1rem;"></div>
+            <h3 id="profileName" style="font-size:1.2rem;"></h3>
+            <p id="profileUser" style="font-size:0.8rem;color:var(--text-muted);"></p>
+          </div>
+          <div id="profileDetails"></div>
+        </div>
+      </section>
+
+      <!-- ========================
+           SECTION: MIS PROSPECTOS
+           ======================== -->
+      <section id="sec-prospectos" class="hidden">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Mis Prospectos</div>
+              <div class="card-subtitle">Pipeline CRM personal · gestiona contactos y seguimiento</div>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="openAddProspectModal()">+ Nuevo Prospecto</button>
+          </div>
+          <div id="empProspList"></div>
+        </div>
+      </section>
+
+      <!-- ========================
+           SECTION: CALCULADORA DE CRÉDITO
+           ======================== -->
+      <section id="sec-calculadora" class="hidden">
+        <div class="card" style="max-width:660px;">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Calculadora de Crédito</div>
+              <div class="card-subtitle">Estima el pago mensual y viabilidad del crédito de tu cliente</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Tipo de crédito</label>
+            <select id="calcTipoCredito" onchange="calcularCredito()">
+              <option value="infonavit">INFONAVIT (tasa anual ~10.45%)</option>
+              <option value="fovissste">FOVISSSTE (tasa anual ~6%)</option>
+              <option value="bancario">Crédito Bancario (tasa anual ~11%)</option>
+              <option value="credito_directo">Crédito Directo Desarrollador (tasa anual ~14%)</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Precio del inmueble (MXN)</label>
+              <input type="number" id="calcPrecio" placeholder="Ej. 850000" oninput="calcularCredito()">
+            </div>
+            <div class="form-group">
+              <label>Enganche (%)</label>
+              <input type="number" id="calcEnganche" min="0" max="80" value="20" oninput="calcularCredito()">
+              <span class="input-hint">% del precio que paga el cliente al inicio</span>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Plazo (años)</label>
+              <input type="number" id="calcPlazo" min="1" max="30" value="15" oninput="calcularCredito()">
+            </div>
+            <div class="form-group">
+              <label>Ingreso mensual neto (opcional)</label>
+              <input type="number" id="calcIngreso" placeholder="Ej. 25000" oninput="calcularCredito()">
+              <span class="input-hint">Para verificar capacidad de pago</span>
+            </div>
+          </div>
+          <div id="calcResult"></div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+</div><!-- /app-layout -->
+
+<!-- ====== MODAL: AGREGAR/EDITAR PROSPECTO ====== -->
+<div class="modal-overlay" id="prospModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="prospModalTitle">Nuevo Prospecto</h3>
+      <button class="modal-close" onclick="closeProspModal()">×</button>
+    </div>
+    <input type="hidden" id="prospEditId">
+    <form id="prospForm" novalidate>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nombre completo <span style="color:var(--rose)">*</span></label>
+          <input type="text" id="prospNombre" placeholder="Nombre del cliente" required>
+        </div>
+        <div class="form-group">
+          <label>Teléfono <span style="color:var(--rose)">*</span></label>
+          <input type="tel" id="prospTel" placeholder="81 1234 5678" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Correo electrónico</label>
+          <input type="email" id="prospEmail" placeholder="cliente@correo.com">
+        </div>
+        <div class="form-group">
+          <label>Etapa del pipeline <span style="color:var(--rose)">*</span></label>
+          <select id="prospStage" required>
+            <option value="Nuevo contacto">Nuevo contacto</option>
+            <option value="Visita agendada">Visita agendada</option>
+            <option value="Lote mostrado">Lote mostrado</option>
+            <option value="En proceso">En proceso</option>
+            <option value="Cerrado">Cerrado</option>
+            <option value="Descartado">Descartado</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Lote / fraccionamiento de interés</label>
+        <input type="text" id="prospInteres" placeholder="Ej. Lomas de Monterrey, Lote 08">
+      </div>
+      <div class="form-group">
+        <label>Notas / seguimiento</label>
+        <textarea id="prospNotas" placeholder="Observaciones, preferencias, compromisos pendientes..."></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-ghost" onclick="closeProspModal()">Cancelar</button>
+        <button type="submit" class="btn btn-primary" id="prospSubmitBtn">Guardar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/employee.js"></script>
+</body>
+</html>
